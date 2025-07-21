@@ -18,7 +18,6 @@ const App = () => {
 
   const {token} = useAppContext();
   
-
   return (
     <div>
       <Toaster />

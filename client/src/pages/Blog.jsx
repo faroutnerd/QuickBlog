@@ -16,7 +16,7 @@ const Blog = () => {
 
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
-  const [name, setName] =useState('');
+  const [name, setName] = useState('');
   const [content, setContent] = useState('');
 
   const fetchBlogData = async () => {
@@ -35,6 +35,7 @@ const Blog = () => {
           setComments(data.comments);
         } else {
           toast.error(data.message);
+          setComments([]);
         }
     } catch (error) {
       toast.error(error.message);
@@ -48,7 +49,7 @@ const Blog = () => {
       const {data} = await axios.post('/api/blog/add-comment', {blog: id, name, content});
       if(data.success) {
         toast.success(data.message);
-        setComments(data.comments);
+        // setComments(data.comments);
         setName('');
         setContent('');
       } else {
