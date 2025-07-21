@@ -1,31 +1,62 @@
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { assets, blog_data, comments_data } from '../assets/assets';
 import Moment from 'moment'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
+import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
 
 const Blog = () => {
 
   const {id} = useParams();
+
+  const {axios} = useAppContext();
+
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
-
   const [name, setName] =useState('');
   const [content, setContent] = useState('');
 
   const fetchBlogData = async () => {
-    const data = blog_data.find(item => item._id === id);
-    setData(data);
+    try {
+      const {data} = await axios.get(`/api/blog/${id}`);
+      data.success ? setData(data.blog) : toast.error(data.message);
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   const fetchComments = async () => {
-    setComments(comments_data);
+    try {
+      const {data} = await axios.post(`/api/blog/comments`, {blogId: id});
+        if(data.success) {
+          setComments(data.comments);
+        } else {
+          toast.error(data.message);
+        }
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
 
   const addComment = async (e) => {
     e.preventDefault();
+
+    try {
+      const {data} = await axios.post('/api/blog/add-comment', {blog: id, name, content});
+      if(data.success) {
+        toast.success(data.message);
+        setComments(data.comments);
+        setName('');
+        setContent('');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
 
   useEffect(() => {
@@ -55,7 +86,7 @@ const Blog = () => {
 
         {/* Comment Section */}
         <div className='mt-14 mb-10 max-w-3xl mx-auto'>
-          <p className='font-semibold mb-4'>Comments ({comments.length})</p>
+          <p className='font-semibold mb-4'>Comments ({comments?.length || 0})</p>
           <div className="flex flex-col gap-4">
             {comments.map((item, index) => (
               <div key={index} className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-gray-600">
@@ -88,7 +119,7 @@ const Blog = () => {
 
             {/* Share Buttons */}
             <div className="my-24 max-w-3xl mx-auto">
-              <p className='font-semibold my-4'>Share this articlle on social media</p>
+              <p className='font-semibold my-4'>Share this article on social media</p>
               <div className="flex">
                 <img src={assets.facebook_icon} alt="" width={50} />
                 <img src={assets.twitter_icon} alt="" width={50} />
