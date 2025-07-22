@@ -95,12 +95,43 @@ export const togglePublish = async (req, res) => {
     }
 }
 
+// export const addComment = async (req, res) => {
+//     try {
+        
+//         const {blog, name, content} = req.body;
+//         await Comment.create({blog, name, content});
+//         res.status(200).json({success: true, message: 'Comment added for review.'})
+
+//     } catch (error) {
+//         return res.status(500).json({success: false, message:error.message});
+//     }
+// }
+
 export const addComment = async (req, res) => {
     try {
         
         const {blog, name, content} = req.body;
-        await Comment.create({blog, name, content});
-        res.status(200).json({success: true, message: 'Comment added for review.'})
+
+        const moderationPrompt = `
+        Analyze the following comment and check if it contains offensive, abusive or inappropriate language:
+        Comment: "${content}"
+        Reply only with "approve" if it is clean, or "reject" if it contains bad language.
+        `;
+
+        const aiResponse = await main(moderationPrompt);
+        const decision = aiResponse.toLocaleLowerCase().includes('reject') ? false : true;
+
+        await Comment.create({
+            blog, name, content, 
+            isApproved: decision
+        });
+
+        res.status(200).json({
+            success: true,
+            message: decision
+                ? "Comment added and approved."
+                : "Comment added for review due to inappropriate content."
+        });
 
     } catch (error) {
         return res.status(500).json({success: false, message:error.message});
