@@ -8,6 +8,10 @@ import Loader from '../components/Loader';
 import { useAppContext } from '../context/AppContext';
 import toast from 'react-hot-toast';
 
+const Spinner = () => (
+  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+);
+
 const Blog = () => {
 
   const {id} = useParams();
@@ -18,6 +22,7 @@ const Blog = () => {
   const [comments, setComments] = useState([]);
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchBlogData = async () => {
     try {
@@ -46,17 +51,20 @@ const Blog = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const {data} = await axios.post('/api/blog/add-comment', {blog: id, name, content});
       if(data.success) {
         toast.success(data.message);
-        // setComments(data.comments);
         setName('');
         setContent('');
+        await fetchComments();
       } else {
         toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -114,7 +122,7 @@ const Blog = () => {
 
             <textarea onChange={(e) => setContent(e.target.value)} value={content} placeholder='Comment' className='w-full p-2  border border-gray-300 rounded outline-none h-48'></textarea>
 
-            <button type='submit' className='bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer'>Submit</button>
+            <button type='submit' className='bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer w-36 h-10 flex items-center justify-center'>{loading ? <Spinner/>: 'Submit'}</button>
 
           </form>
 
