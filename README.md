@@ -8,8 +8,8 @@ A full-stack Spotify-like music streaming application built using **ReactJS** an
 ---
 
 ## 📸 Preview
+<img width="950" height="465" alt="image" src="https://github.com/user-attachments/assets/bd1364b4-22b0-45ba-924f-c54e887d376c" />
 
-![App Screenshot](./2f811a62-5615-49fb-a243-5fb1e1a35f4e.png)
 
 ---
 
