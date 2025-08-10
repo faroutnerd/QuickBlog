@@ -2,7 +2,10 @@
 
 A modern, full-stack AI-integrated blogging platform built with **React.js**, **Tailwind CSS**, **Node.js**, and **MongoDB**.
 
-![Full Stack Blog App Website](https://github.com/user-attachments/assets/2bae6a02-7912-4597-9660-cc3bfc0829db)
+## 🔗 Live Demo
+[Click here to visit the live site 🚀](https://quick-blog-beta-woad.vercel.app/)
+
+[![Full Stack Blog App Website](https://github.com/user-attachments/assets/2bae6a02-7912-4597-9660-cc3bfc0829db)](https://quick-blog-beta-woad.vercel.app/)
 
 
 ## 🚀 Features
