@@ -33,6 +33,12 @@ const Login = () => {
                 <div className="w-full py-6 text-center">
                     <h1 className='text-3xl font-bold'><span className='text-primary'>Admin</span> Login</h1>
                     <p className='font-light'>Enter your credentials to access the admin panel</p>
+                    <p className='mt-2 text-sm text-gray-500'>
+                        Email: <span className="font-medium">farhan@gmail.com</span>
+                    </p>
+                    <p className='text-sm text-gray-500'>
+                        Password: <span className="font-medium">123456</span>
+                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className='mt-6 w-full max-w-md text-gray-600'>
